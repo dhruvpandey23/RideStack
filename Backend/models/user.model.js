@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 
 
-const userSchema = new Schema(
+const userSchema = new Schema( 
     {
         fullName :{
             firstName:{
@@ -18,8 +18,8 @@ const userSchema = new Schema(
             }
         },
         email:{
-           type:String,
-           required:true,
+           type:String,  
+           required:true, 
            unique:true,
            minlength:[5,"Email minimum length should be 5 character"]
         },
