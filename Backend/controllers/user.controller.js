@@ -45,5 +45,28 @@ const registerUser = async (req,res,next)=>{
     return res.status(201).json(new ApiResponse(201,{token,userObj},"User created successfully"))
 }
 
+const loginUser = async (req,res,next)=>{
+  // validate user details
+  // check if user exists
+  // check password
+  // generate access token
+  // return access token and user details
+  const error =  validationResult(req);
+  if(!error.isEmpty()){
+    return next(new ApiError(400,`Validation Failed`,error.array()))
+  }
+  const {email,password} = req.body;
+  const user = await User.findOne({email}).select('+password');
+  if(!user){
+    
+    return res.status(400).json(new ApiError(401,"Invalid username or password"));
+  }
+  const isMatch = await user.comparePassword(password);
+  if(!isMatch){
+    return res.status(400).json(new ApiError(401,"Invalid username or password"));
+  }
+  const token = user.generateAccessToken();
+  return res.status(200).json(new ApiResponse(200,{token,user},"Login successful"))
+}
 
-export {registerUser}
+export {registerUser , loginUser}
