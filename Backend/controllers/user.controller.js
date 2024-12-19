@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from 'jsonwebtoken'
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import { BlacklistToken } from "../models/blacklistToken.model.js";
 
 
 const registerUser = async (req,res,next)=>{
@@ -66,7 +67,25 @@ const loginUser = async (req,res,next)=>{
     return res.status(400).json(new ApiError(401,"Invalid username or password"));
   }
   const token = user.generateAccessToken();
+
+  // set token in cookie
+  res.cookie('token',token,{httpOnly:true});
+
   return res.status(200).json(new ApiResponse(200,{token,user},"Login successful"))
 }
 
-export {registerUser , loginUser}
+const getUserProfile = async (req,res,next)=>{
+  const user = req.user;
+  return res.status(200).json(new ApiResponse(200,{user},"User details fetched successfully"))
+}
+
+const logoutUser = async (req,res,next)=>{
+  res.clearCookie('token');
+  // create blacklisted token
+  const token = req.cookies?.token|| req.header("Authorization")?.replace("Bearer ", "");
+  await BlacklistToken.create({token});
+
+  return res.status(200).json(new ApiResponse(200,{},"Logout successful"))
+}
+
+export {registerUser , loginUser, getUserProfile,logoutUser}
