@@ -2,7 +2,7 @@
 
 ## Endpoints
 
-### 1. `/user/register`
+### 1. `/user/register` Endpoint
 
 #### Description
 Registers a new user by creating a user account with the provided information.
@@ -51,7 +51,7 @@ The request body should be in JSON format and include the following fields:
 
 ---
 
-### 2. `/user/login`
+### 2. `/user/login` Endpoint
 
 #### Description
 Authenticates a user using their email and password, returning a JWT token upon successful login.
@@ -94,7 +94,7 @@ The request body should be in JSON format and include the following fields:
 
 ---
 
-### 3. `/users/profile`
+### 3. `/users/profile` Endpoint
 
 #### Description
 Retrieves the profile information of the currently authenticated user.
@@ -127,7 +127,7 @@ Authorization: Bearer <token>
 
 ---
 
-### 4. `/users/logout`
+### 4. `/users/logout` Endpoint
 
 #### Description
 Logs out the current user and blacklists the token provided in the cookie or headers.
@@ -149,8 +149,8 @@ Requires a valid JWT token in the Authorization header or cookie.
 - Ensure proper token invalidation to prevent reuse.
 
 ---
-
-### 5. `/captains/register`
+ 
+### 5. `/captains/register` Endpoint
 
 #### Description
 Registers a new captain by creating a captain account with the provided information.
@@ -212,3 +212,101 @@ The request body should be in JSON format and include the following fields:
 ### Notes
 - Validate all required fields before creating a new captain account.
 - Ensure the `vehicleType` field contains only allowed values ('car', 'motorcycle', or 'auto').
+
+
+
+### 6. `/captains/login` Endpoint
+
+**Description**  
+Authenticates a captain using their email and password, returning a JWT token upon successful login.
+
+**HTTP Method**  
+`POST`
+
+**Endpoint**  
+`/captains/login`
+
+**Request Body**  
+The request body should be in JSON format and include the following fields:
+
+- **email** (string, required): Captain's email address (must be a valid email).  
+- **password** (string, required): Captain's password (minimum 6 characters).
+
+**Example Response**  
+```json
+{
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "captain@example.com",
+    "password": "securePassword123",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC-1234",
+      "capacity": 4,
+      "vehicleType": "Car"
+    }
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+### 7. `/captains/profile` Endpoint
+
+
+**Description**  
+Retrieves the profile information of the currently authenticated captain.
+
+**HTTP Method**  
+`GET`
+
+**Authentication**  
+Requires a valid JWT token in the `Authorization` header:  
+`Authorization: Bearer <token>`
+
+---
+
+### Example Response
+
+```json
+{
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "captain@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC-1234",
+      "capacity": 4,
+      "vehicleType": "Car"
+    }
+  }
+}
+```
+
+### 8. `/captains/logout` Endpoint
+
+**Description**  
+Logs out the current captain and blacklists the token provided in the cookie or headers.
+
+**HTTP Method**  
+`GET`
+
+**Authentication**  
+Requires a valid JWT token in either:  
+- The `Authorization` header: `Authorization: Bearer <token>`  
+- A cookie.
+
+---
+
+### Example Response
+
+```json
+{
+  "message": "Logout successfully"
+}
+
+
