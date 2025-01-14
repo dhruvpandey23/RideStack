@@ -21,7 +21,7 @@ const registerCaptain = async (req,res,next)=>{
     const {fullName,email,password,vehicle} = req.body;
 
     // check if user already exists
-    const captain = await Captain.findOne({email});
+    const captain = await Captain.findOne({email}); 
     if(captain){
         // throw new ApiError(400,"User already exists"); 
         return res.status(400).json(new ApiError(400,"Captain already exists"));

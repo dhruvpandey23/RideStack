@@ -63,7 +63,6 @@ const captainSchema = new Schema(
         },
         status :{
             type:String,    
-            required:true,
             minlength:[3,"Status minimum length should be 3 character"],
             enum:['active','inactive'],
             default:'inactive'
